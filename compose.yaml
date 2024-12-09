@@ -1,10 +1,30 @@
 services:
-  mysql:
-    image: 'mysql:latest'
+  db:
+    container_name: 'asset-db'
+    image: 'mariadb:10.4.32'
     environment:
-      - 'MYSQL_DATABASE=mydatabase'
-      - 'MYSQL_PASSWORD=secret'
-      - 'MYSQL_ROOT_PASSWORD=verysecret'
+      - 'MYSQL_DATABASE=asset-lends'
+      - 'MYSQL_ROOT_PASSWORD=1234'
       - 'MYSQL_USER=myuser'
+      - 'MYSQL_PASSWORD=secret'
+    volumes:
+      - asset-db-data:/var/lib/mysql
+    command:
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_general_ci
     ports:
-      - '3306'
+      - "3306:3306"
+
+  phpmyadmin:
+    container_name: "asset-phpmyadmin"
+    image: "phpmyadmin:5.2.1"
+    environment:
+      - PMA_HOST=db
+      - PMA_PORT=3306
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
+
+volumes:
+  asset-db-data:
