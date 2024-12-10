@@ -1,7 +1,5 @@
 package com.example.asset_lend_backend.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -15,7 +13,6 @@ import java.sql.Timestamp;
 @Data
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "assets")
-@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class Asset {
 
     @Id

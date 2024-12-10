@@ -1,47 +1,42 @@
 package com.example.asset_lend_backend.controller;
 
-// import jakarta.servlet.http.HttpServletRequest;
-// import jakarta.validation.Valid;
+import com.example.asset_lend_backend.response.ApiResponse;
+import com.example.asset_lend_backend.dto.UserDTO;
+import com.example.asset_lend_backend.model.User;
+import com.example.asset_lend_backend.service.UserService;
 
-// import org.springframework.beans.factory.annotation.Autowired;
-// import org.springframework.http.ResponseEntity;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
 
-    // @Autowired
-    // private UserService userService;
+    @Autowired
+    private UserService service;
 
     @GetMapping
-    public String index() {
-        return "def";
+    public ResponseEntity<ApiResponse<List<UserDTO>>> index() {
+        return ResponseEntity.ok(new ApiResponse<>(true, service.findAll(), "Users found"));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse<User>> show(@PathVariable Long id) {
+        return service.findById(id)
+                .map(user -> new ApiResponse<>(true, user, "User found"))
+                .map(response -> ResponseEntity.ok(response))
+                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(new ApiResponse<>(false, null, "User not found")));
     }
 
     // @PostMapping
-    // public ResponseEntity<?> insert(@Valid @RequestBody UserWithInsert user) {
-    //     return userService.insert(user);
-    // }
-
-    // @PutMapping("/{id}")
-    // public ResponseEntity<?> update(@PathVariable Long id, @Valid @RequestBody UserWithUpdate user,
-    //         HttpServletRequest request) {
-    //     return userService.update(id, user, request);
-    // }
-
-    // @DeleteMapping("/{id}")
-    // public ResponseEntity<?> destroy(@PathVariable Long id, HttpServletRequest request) {
-    //     return userService.destroy(id, request);
-    // }
-
-    // @PostMapping("/login")
-    // public ResponseEntity<?> login(@Valid @RequestBody UserLoginInputs user) {
-    //     return userService.login(user);
-    // }
-
-    // @PostMapping("/logout")
-    // public ResponseEntity<?> logout(HttpServletRequest request) {
-    //     return userService.logout(request);
+    // public ResponseEntity<ApiResponse<User>> createUser(@RequestBody User user) {
+    // User createdUser = service.createUser(user);
+    // return ResponseEntity.status(HttpStatus.CREATED)
+    // .body(new ApiResponse<>(true, createdUser, "User created successfully"));
     // }
 }
