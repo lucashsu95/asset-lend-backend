@@ -2,6 +2,8 @@ package com.example.asset_lend_backend.controller;
 
 import com.example.asset_lend_backend.response.ApiResponse;
 import com.example.asset_lend_backend.dto.UserDTO;
+import com.example.asset_lend_backend.dto.UserDTOWithToken;
+import com.example.asset_lend_backend.dto.UserLoginRequest;
 import com.example.asset_lend_backend.mapper.UserMapper;
 import com.example.asset_lend_backend.model.User;
 import com.example.asset_lend_backend.service.UserService;
@@ -41,10 +43,12 @@ public class UserController {
         return ApiResponse.success(UserMapper.toDTO(user));
     }
 
-    // @PostMapping
-    // public ResponseEntity<ApiResponse<User>> createUser(@RequestBody User user) {
-    // User createdUser = service.createUser(user);
-    // return ResponseEntity.status(HttpStatus.CREATED)
-    // .body(new ApiResponse<>(true, createdUser, "User created successfully"));
-    // }
+    @PostMapping
+    public ResponseEntity<ApiResponse<UserDTOWithToken>> login(@RequestBody UserLoginRequest request) {
+        UserDTOWithToken user = service.login(request);
+        if(user == null) {
+            return ApiResponse.INVALID_LOGIN();
+        }
+        return ApiResponse.success(user);
+    }
 }

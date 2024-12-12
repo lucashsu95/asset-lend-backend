@@ -1,17 +1,10 @@
 package com.example.asset_lend_backend.response;
 
-import java.util.List;
-
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-
-import com.fasterxml.jackson.annotation.JsonInclude;
-
 import lombok.Getter;
 import lombok.Setter;
 
-@JsonInclude(JsonInclude.Include.NON_NULL) // 確保僅包含非空字段
 @Getter
 @Setter
 public class ApiResponse<T> {
@@ -26,24 +19,52 @@ public class ApiResponse<T> {
     }
 
     public static <T> ResponseEntity<ApiResponse<T>> success(T data) {
-        return success(data, HttpStatus.OK);
+        return success(data, 200);
     }
     
     public static <T> ResponseEntity<ApiResponse<T>> fail(String message) {
-        return fail(message, HttpStatus.BAD_REQUEST);
+        return fail(message, 400);
     }
 
-    public static <T> ResponseEntity<ApiResponse<T>> success(T data, HttpStatus statusCode) {
+    public static <T> ResponseEntity<ApiResponse<T>> success(T data, Integer statusCode) {
         return ResponseEntity.status(statusCode).contentType(MediaType.APPLICATION_JSON)
                 .body(new ApiResponse<T>(true, data, ""));
     }
 
-    public static <T> ResponseEntity<ApiResponse<T>> fail(String message, HttpStatus statusCode) {
+    public static <T> ResponseEntity<ApiResponse<T>> fail(String message, Integer statusCode) {
         return ResponseEntity.status(statusCode).contentType(MediaType.APPLICATION_JSON)
                 .body(new ApiResponse<T>(false, (T) null, message));
     };
 
     public static <T> ResponseEntity<ApiResponse<T>> USER_NOT_FOUND() {
-        return fail("MSG_USER_NOT_FOUND", HttpStatus.NOT_FOUND);
+        return fail("MSG_USER_NOT_FOUND", 404);
+    }
+
+    public static <T> ResponseEntity<ApiResponse<T>> INVALID_LOGIN() {
+        return fail("MSG_INVALID_LOGIN");
+    }
+
+    public static <T> ResponseEntity<ApiResponse<T>> USER_EXISTS() {
+        return fail("MSG_USER_EXISTS", 409);
+    }
+
+    public static <T> ResponseEntity<ApiResponse<T>> USER_NOT_EXISTS() {
+        return fail("MSG_USER_NOT_EXISTS", 404);
+    }
+
+    public static <T> ResponseEntity<ApiResponse<T>> INVALID_ACCESS_TOKEN() {
+        return fail("MSG_INVALID_ACCESS_TOKEN", 401);
+    }
+
+    public static <T> ResponseEntity<ApiResponse<T>> PERMISSION_DENY() {
+        return fail("MSG_PERMISSION_DENY", 403);
+    }
+
+    public static <T> ResponseEntity<ApiResponse<T>> MISSING_FIELD() {
+        return fail("MSG_MISSING_FIELD");
+    }
+
+    public static <T> ResponseEntity<ApiResponse<T>> WRONG_DATA_TYPE() {
+        return fail("MSG_WRONG_DATA_TYPE");
     }
 }

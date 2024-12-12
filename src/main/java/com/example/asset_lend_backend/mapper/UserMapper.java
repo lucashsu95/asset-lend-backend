@@ -9,7 +9,7 @@ public class UserMapper {
         return new UserDTO(user);
     }
 
-    public static UserDTO toDTOWithToken(User user) {
+    public static UserDTOWithToken toDTOWithToken(User user) {
         UserDTOWithToken dto = new UserDTOWithToken(user);
         dto.setAccess_token(user.getAccess_token());
         return dto;
