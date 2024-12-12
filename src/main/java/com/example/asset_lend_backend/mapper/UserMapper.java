@@ -1,20 +1,16 @@
 package com.example.asset_lend_backend.mapper;
 
 import com.example.asset_lend_backend.dto.UserDTO;
+import com.example.asset_lend_backend.dto.UserDTOWithToken;
 import com.example.asset_lend_backend.model.User;
 
 public class UserMapper {
     public static UserDTO toDTO(User user) {
-        UserDTO dto = new UserDTO();
-        dto.setId(user.getId());
-        dto.setNickname(user.getNickname());
-        dto.setEmail(user.getEmail());
-        dto.setType(user.getType());
-        return dto;
+        return new UserDTO(user);
     }
 
     public static UserDTO toDTOWithToken(User user) {
-        UserDTO dto = toDTO(user);
+        UserDTOWithToken dto = new UserDTOWithToken(user);
         dto.setAccess_token(user.getAccess_token());
         return dto;
     }

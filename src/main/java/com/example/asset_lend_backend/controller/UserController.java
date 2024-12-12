@@ -2,13 +2,13 @@ package com.example.asset_lend_backend.controller;
 
 import com.example.asset_lend_backend.response.ApiResponse;
 import com.example.asset_lend_backend.dto.UserDTO;
+import com.example.asset_lend_backend.mapper.UserMapper;
 import com.example.asset_lend_backend.model.User;
 import com.example.asset_lend_backend.service.UserService;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,20 +17,28 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     @Autowired
-    private UserService service;
+    private final UserService service;
+
+    public UserController(UserService service) {
+        this.service = service;
+    }
 
     @GetMapping
     public ResponseEntity<ApiResponse<List<UserDTO>>> index() {
-        return ResponseEntity.ok(new ApiResponse<>(true, service.findAll(), "Users found"));
+        try {
+            return ApiResponse.success(service.findAll());
+        } catch (Exception e) {
+            return ApiResponse.fail(e.getMessage(), null);
+        }
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<User>> show(@PathVariable Long id) {
-        return service.findById(id)
-                .map(user -> new ApiResponse<>(true, user, "User found"))
-                .map(response -> ResponseEntity.ok(response))
-                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(new ApiResponse<>(false, null, "User not found")));
+    public ResponseEntity<ApiResponse<UserDTO>> show(@PathVariable Long id) {
+        User user = service.findById(id).orElse(null);
+        if (user == null) {
+            return ApiResponse.USER_NOT_FOUND();
+        }
+        return ApiResponse.success(UserMapper.toDTO(user));
     }
 
     // @PostMapping

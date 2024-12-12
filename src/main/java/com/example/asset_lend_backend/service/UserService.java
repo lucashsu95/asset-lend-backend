@@ -15,24 +15,24 @@ import java.util.stream.Collectors;
 public class UserService {
 
     @Autowired
-    private UserRepository userRepository;
+    private UserRepository repo;
 
-    public List<UserDTO> findAll() {
-        return userRepository.findAll().stream()
+    public List<UserDTO> findAll() throws Exception {
+        return repo.findAll().stream()
                 .map(UserMapper::toDTO)
                 .collect(Collectors.toList());
     }
 
     public void save(UserDTO userDTO) {
         User user = UserMapper.toEntity(userDTO);
-        userRepository.save(user);
+        repo.save(user);
     }
 
     public Optional<User> findById(Long id) {
-        return userRepository.findById(id);
+        return repo.findById(id);
     }
 
     public void deleteById(Long id) {
-        userRepository.deleteById(id);
+        repo.deleteById(id);
     }
 }
