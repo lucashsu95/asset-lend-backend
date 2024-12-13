@@ -6,6 +6,8 @@ import com.example.asset_lend_backend.mapper.UserMapper;
 import com.example.asset_lend_backend.model.User;
 import com.example.asset_lend_backend.service.UserService;
 
+import jakarta.validation.Valid;
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +34,16 @@ public class UserController {
         }
     }
 
+    @PostMapping
+    public ResponseEntity<ApiResponse<UserDTO>> insert(@Valid @RequestBody UserDTO userDTO) {
+        try {
+            service.save(userDTO);
+            return ApiResponse.success(userDTO);
+        } catch (Exception e) {
+            return ApiResponse.fail(e.getMessage(), null);
+        }
+    }
+    
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<UserDTO>> show(@PathVariable Long id) {
         User user = service.findById(id).orElse(null);

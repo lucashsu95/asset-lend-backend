@@ -35,6 +35,7 @@ public class GlobalExceptionHandler {
         ex.getBindingResult().getAllErrors().forEach((error) -> {
             String fieldName = ((FieldError) error).getField();
             String errorMessage = error.getDefaultMessage();
+            errors.put(fieldName, errorMessage);
         });
 
         // 根據錯誤類型返回不同的錯誤響應
