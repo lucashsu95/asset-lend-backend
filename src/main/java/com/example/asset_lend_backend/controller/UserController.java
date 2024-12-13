@@ -42,13 +42,4 @@ public class UserController {
         }
         return ApiResponse.success(UserMapper.toDTO(user));
     }
-
-    @PostMapping
-    public ResponseEntity<ApiResponse<UserDTOWithToken>> login(@RequestBody UserLoginRequest request) {
-        UserDTOWithToken user = service.login(request);
-        if(user == null) {
-            return ApiResponse.INVALID_LOGIN();
-        }
-        return ApiResponse.success(user);
-    }
 }

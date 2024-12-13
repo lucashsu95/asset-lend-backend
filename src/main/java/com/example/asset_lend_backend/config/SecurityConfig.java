@@ -7,13 +7,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Date;
 import javax.crypto.SecretKey;
+
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 
 @Configuration
 public class SecurityConfig {
 
-        private static final SecretKey SECRET_KEY = Keys.secretKeyFor(io.jsonwebtoken.SignatureAlgorithm.HS256);
+    private static final SecretKey SECRET_KEY = Keys.secretKeyFor(io.jsonwebtoken.SignatureAlgorithm.HS256);
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -31,5 +33,19 @@ public class SecurityConfig {
                 .setExpiration(new Date(System.currentTimeMillis() + 86400000)) // 1 day expiration
                 .signWith(SECRET_KEY)
                 .compact();
+    }
+
+    public boolean validateToken(String token) {
+        try {
+            Jwts.parserBuilder().setSigningKey(SECRET_KEY).build().parseClaimsJws(token);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public String getEmailFromToken(String token) {
+        Claims claims = Jwts.parserBuilder().setSigningKey(SECRET_KEY).build().parseClaimsJws(token).getBody();
+        return claims.getSubject();
     }
 }

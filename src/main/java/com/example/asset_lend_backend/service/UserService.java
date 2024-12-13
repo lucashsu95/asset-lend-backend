@@ -8,6 +8,8 @@ import com.example.asset_lend_backend.mapper.UserMapper;
 import com.example.asset_lend_backend.model.User;
 import com.example.asset_lend_backend.repository.UserRepository;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +25,7 @@ public class UserService {
 
     @Autowired
     private SecurityConfig securityConfig;
-    
+
     public List<UserDTO> findAll() throws Exception {
         return repo.findAll().stream()
                 .map(UserMapper::toDTO)
@@ -49,7 +51,7 @@ public class UserService {
             return null;
         }
 
-        if (!securityConfig.checkPassword(request.getPassword(),user.getPasswordHash())) {
+        if (!securityConfig.checkPassword(request.getPassword(), user.getPasswordHash())) {
             return null;
         }
 
@@ -58,5 +60,10 @@ public class UserService {
         repo.save(user);
 
         return UserMapper.toDTOWithToken(user);
+    }
+
+    public void logout(User currentUser) {
+        currentUser.setAccess_token(null);
+        repo.save(currentUser);
     }
 }

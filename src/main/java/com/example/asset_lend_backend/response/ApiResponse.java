@@ -2,6 +2,9 @@ package com.example.asset_lend_backend.response;
 
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -66,5 +69,15 @@ public class ApiResponse<T> {
 
     public static <T> ResponseEntity<ApiResponse<T>> WRONG_DATA_TYPE() {
         return fail("MSG_WRONG_DATA_TYPE");
+    }
+
+        @Override
+    public String toString() {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            return mapper.writeValueAsString(this);
+        } catch (Exception e) {
+            return "{\"success\":false,\"message\":\"Error converting response to JSON\"}";
+        }
     }
 }
