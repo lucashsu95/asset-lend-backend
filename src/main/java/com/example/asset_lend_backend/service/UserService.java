@@ -8,8 +8,6 @@ import com.example.asset_lend_backend.mapper.UserMapper;
 import com.example.asset_lend_backend.model.User;
 import com.example.asset_lend_backend.repository.UserRepository;
 
-import jakarta.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
