@@ -57,6 +57,9 @@ public class User {
     @Column(name = "deleted_at")
     private Timestamp deletedAt;
 
+    @Transient
+    private String password;
+
     public enum UserType {
         USER,
         ADMIN

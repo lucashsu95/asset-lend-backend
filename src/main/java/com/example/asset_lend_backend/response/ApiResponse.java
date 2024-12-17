@@ -24,17 +24,23 @@ public class ApiResponse<T> {
     public static <T> ResponseEntity<ApiResponse<T>> success(T data) {
         return success(data, 200);
     }
-    
+
     public static <T> ResponseEntity<ApiResponse<T>> fail(String message) {
         return fail(message, 400);
     }
 
     public static <T> ResponseEntity<ApiResponse<T>> success(T data, Integer statusCode) {
+        if (statusCode == null) {
+            statusCode = 200;
+        }
         return ResponseEntity.status(statusCode).contentType(MediaType.APPLICATION_JSON)
                 .body(new ApiResponse<T>(true, data, ""));
     }
 
     public static <T> ResponseEntity<ApiResponse<T>> fail(String message, Integer statusCode) {
+        if (statusCode == null) {
+            statusCode = 400;
+        }
         return ResponseEntity.status(statusCode).contentType(MediaType.APPLICATION_JSON)
                 .body(new ApiResponse<T>(false, (T) null, message));
     };
@@ -71,7 +77,7 @@ public class ApiResponse<T> {
         return fail("MSG_WRONG_DATA_TYPE");
     }
 
-        @Override
+    @Override
     public String toString() {
         try {
             ObjectMapper mapper = new ObjectMapper();

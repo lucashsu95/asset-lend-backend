@@ -10,7 +10,7 @@ docker-compose up -d
 
 ## Development
 
-- java11
+- java17
 - spring boot
 - mariadb: 10.4.32
 - domain:`http://127.0.0.1:8000/api`
@@ -21,7 +21,7 @@ docker-compose up -d
 | --- | --- | --- | --- |
 | 2 | `/api/auth/logout` | POST | 登出 |
 | 3 | `/api/auth/signup` | POST | 註冊 |
-| 4 | `/api/users` | GET | 獲得所有使用者 |
+| 4 | `/api/user s` | GET | 獲得所有使用者 |
 | 5 | `/api/user` | POST | 新增使用者 |
 | 6 | `/api/user/{user_id}` | PUT | 編輯使用者 |
 | 7 | `/api/user/{user_id}` | DELETE | 刪除使用者 |

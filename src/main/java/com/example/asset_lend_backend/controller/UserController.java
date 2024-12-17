@@ -2,6 +2,7 @@ package com.example.asset_lend_backend.controller;
 
 import com.example.asset_lend_backend.response.ApiResponse;
 import com.example.asset_lend_backend.dto.UserDTO;
+import com.example.asset_lend_backend.dto.UserDTOWithPassword;
 import com.example.asset_lend_backend.mapper.UserMapper;
 import com.example.asset_lend_backend.model.User;
 import com.example.asset_lend_backend.service.UserService;
@@ -35,10 +36,10 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<UserDTO>> insert(@Valid @RequestBody UserDTO userDTO) {
+    public ResponseEntity<ApiResponse<UserDTO>> insert(@Valid @RequestBody UserDTOWithPassword userDTO) {
         try {
-            service.save(userDTO);
-            return ApiResponse.success(userDTO);
+            UserDTO user = service.save(userDTO);
+            return ApiResponse.success(user);
         } catch (Exception e) {
             return ApiResponse.fail(e.getMessage(), null);
         }
@@ -48,8 +49,8 @@ public class UserController {
     public ResponseEntity<ApiResponse<UserDTO>> show(@PathVariable Long id) {
         User user = service.findById(id).orElse(null);
         if (user == null) {
-            return ApiResponse.USER_NOT_FOUND();
+            return ApiResponse.USER_NOT_EXISTS();
         }
-        return ApiResponse.success(UserMapper.toDTO(user));
+        return ApiResponse.success(new UserMapper().toDTO(user));
     }
 }

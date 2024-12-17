@@ -2,6 +2,7 @@ package com.example.asset_lend_backend.service;
 
 import com.example.asset_lend_backend.config.SecurityConfig;
 import com.example.asset_lend_backend.dto.UserDTO;
+import com.example.asset_lend_backend.dto.UserDTOWithPassword;
 import com.example.asset_lend_backend.dto.UserDTOWithToken;
 import com.example.asset_lend_backend.dto.UserLoginRequest;
 import com.example.asset_lend_backend.mapper.UserMapper;
@@ -9,6 +10,7 @@ import com.example.asset_lend_backend.model.User;
 import com.example.asset_lend_backend.repository.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,15 +26,23 @@ public class UserService {
     @Autowired
     private SecurityConfig securityConfig;
 
+    @Autowired
+    private UserMapper userMapper;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     public List<UserDTO> findAll() throws Exception {
         return repo.findAll().stream()
-                .map(UserMapper::toDTO)
+                .map(userMapper::toDTO)
                 .collect(Collectors.toList());
     }
 
-    public void save(UserDTO userDTO) {
-        User user = UserMapper.toEntity(userDTO);
+    public UserDTO save(UserDTOWithPassword UserDTOWithPassword) {
+        User user = userMapper.toEntity(UserDTOWithPassword);
+        user.setPasswordHash(passwordEncoder.encode(UserDTOWithPassword.getPassword()));
         repo.save(user);
+        return userMapper.toDTO(user);
     }
 
     public Optional<User> findById(Long id) {
@@ -57,7 +67,7 @@ public class UserService {
         user.setAccess_token(token);
         repo.save(user);
 
-        return UserMapper.toDTOWithToken(user);
+        return userMapper.toDTOWithToken(user);
     }
 
     public void logout(User currentUser) {

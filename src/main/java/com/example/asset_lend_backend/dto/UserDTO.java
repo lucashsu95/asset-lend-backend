@@ -17,8 +17,7 @@ public class UserDTO {
     @NotBlank(message = "不得是空值")
     private String nickname;
     
-    @NotNull
-    @NotBlank(message = "不得是空值")
+    @NotNull(message = "不得是空值")
     private UserType type;
     
     @NotNull

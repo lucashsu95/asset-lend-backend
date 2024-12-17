@@ -1,21 +1,30 @@
 package com.example.asset_lend_backend.mapper;
 
 import com.example.asset_lend_backend.dto.UserDTO;
+import com.example.asset_lend_backend.dto.UserDTOWithPassword;
 import com.example.asset_lend_backend.dto.UserDTOWithToken;
 import com.example.asset_lend_backend.model.User;
 
+import org.springframework.stereotype.Component;
+@Component
 public class UserMapper {
-    public static UserDTO toDTO(User user) {
+
+
+    public UserDTO toDTO(User user) {
         return new UserDTO(user);
     }
 
-    public static UserDTOWithToken toDTOWithToken(User user) {
+    public UserDTOWithToken toDTOWithToken(User user) {
         UserDTOWithToken dto = new UserDTOWithToken(user);
-        dto.setAccess_token(user.getAccess_token());
         return dto;
     }
 
-    public static User toEntity(UserDTO dto) {
+    public UserDTOWithPassword toDTOWithPassword(User user){
+        UserDTOWithPassword dto = new UserDTOWithPassword(user);
+        return dto;
+    }
+
+    public User toEntity(UserDTO dto) {
         User user = new User();
         user.setId(dto.getId());
         user.setNickname(dto.getNickname());
