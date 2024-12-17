@@ -12,6 +12,8 @@ import jakarta.validation.Valid;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,8 +42,10 @@ public class UserController {
         try {
             UserDTO user = service.save(userDTO);
             return ApiResponse.success(user);
+        } catch (DataIntegrityViolationException e) {
+            return ApiResponse.USER_EXISTS();
         } catch (Exception e) {
-            return ApiResponse.fail(e.getMessage(), null);
+            return ApiResponse.fail(e.getMessage(), HttpStatus.BAD_REQUEST.value());
         }
     }
     
